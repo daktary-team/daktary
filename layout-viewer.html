@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="layout-viewer.css">
+<script src="component-contribution.js"></script>
+<script>
+  if (githubUrl.checkGhBlob()) {
+    injectLayoutViewer()
+  }
+</script>
+<template id="tpl-viewer">
+  <main>
+    <div id="parentRepo" class="breadcrumbs">
+      <!-- from component-breadcrumb.js -->
+    </div>
+    <article id="contribution">
+      <!-- from component-contribution.js -->
+    </article>
+  </main>
+</template>

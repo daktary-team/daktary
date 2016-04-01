@@ -9,17 +9,17 @@
  * @result {String} A string representing an html list.
  */
 const tplRessources = (data) =>
-  data.ressources.map(elt =>
-    `<article class="gh-list-item gh-type-${elt.type}">
-       <h2 class="gh-list-title"><a href="${elt.url}">${elt.name}</a></h2>
+  data.ressources.map(({type, url, name, prose_url, git_url}) =>
+    `<article class="gh-list-item gh-type-${type}">
+       <h2 class="gh-list-title"><a href="${url}">${name}</a></h2>
        <div class="gh-list-meta">
          <p>Mis à jour le : 02/02/16</p>
          <p>Créé par : <a href="">pntbr</a> / Contributeurs les plus actifs :
            <a href="">pntbr</a> / <a href="">wolffgang</a>
          </p>
          <p>
-           ${elt.type === 'file' ? `<a href="${elt.prose_url}">Editer la fiche</a> - ` : ''}
-           <a href="${elt.git_url}">Voir sur Github</a>
+           ${type === 'file' ? `<a href="${prose_url}">Editer la fiche</a> - ` : ''}
+           <a href="${git_url}">Voir sur Github</a>
          </p>
        </div>
        <!--si <image--></image-->
@@ -28,7 +28,7 @@ const tplRessources = (data) =>
        <p class="gh-list-excerpt">Le début de la fiche qui parle de ...</p>
        <a class="gh-list-readmore"
           title="Lire la suite de la fiche Titre de la fiche"
-          href="${elt.url}">Lire la fiche</a>
+          href="${url}">Lire la fiche</a>
      </article>`).join('\n')
 /**
  * Create data for Github ressources with a Github tree Url.

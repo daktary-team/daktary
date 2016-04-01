@@ -8,9 +8,9 @@
  */
 const tplRepositories = (data) =>
   `<ul>` +
-     data.repos.map(repo =>
-      `<li><a title="${repo.title}" href="${repo.link}"` +
-      ` data-owner="${repo.owner}" data-repo="${repo.repo}">${repo.label}</a></li>`
+     data.repos.map(({owner, repo, title, link, label}) =>
+      `<li><a title="${title}" href="${link}"` +
+      ` data-owner="${owner}" data-repo="${repo}">${label}</a></li>`
      ).join('\n') +
   `</ul>`
 /**

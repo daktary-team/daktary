@@ -86,6 +86,14 @@ CONTRIBUTIONS
 }
 
 /*
+GITHUB FLAVOUR MARKDOWN RE-INTERPRETATION
+*/
+#contribution table[data-table-type="yaml-metadata"],
+svg.octicon {
+  display: none;
+}
+
+/*
 TAGS
 */
 .tags,

@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="layout-repositories.css">
+<script src="component-search.js"></script>
+<script src="component-repositories.js"></script>
+<script src="component-breadcrumb.js"></script>
+<script src="component-ressources.js"></script>
+
+<script>
+  if (githubUrl.checkGhTree()) {
+    injectLayoutRepos()
+  }
+</script>
+
+<template id="tpl-repositories">
+  <header>
+    <h1>MultiBao</h1>
+    <div id="search-engine-wrapper" class="search-engine-wrapper">
+      <!-- from component-search.js -->
+    </div>
+  </header>
+  <aside>
+    <h3>Liste des repos</h3>
+    <div id="gh-repo-list">
+      <!-- from component-repositories.js -->
+    </div>
+  </aside>
+  <main>
+    <div id="breadcrumb" class="breadcrumbs">
+      <!-- from component-breadcrumb.js -->
+    </div>
+    <section id="gh-list" class="gh-list">
+      <!-- from component-ressources.js -->
+    </section>
+  </main>
+</template>

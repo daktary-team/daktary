@@ -1,20 +1,14 @@
 /**
- * Layout for display a Github ressource.
- *
- */
-const tplLayoutViewer = () => `
-  <main>
-    <div id="parentRepo" class="breadcrumbs">
-      <!-- from component-breadcrumb.js -->
-    </div>
-    <article id="contribution">
-      <!-- from component-contribution.js -->
-    </article>
-  </main>`
-
-/**
  * Inject HTML code in #container tag.
  *
  */
-const injectLayoutViewer = () =>
-  document.querySelector('#container').innerHTML = tplLayoutViewer()
+const injectLayoutViewer = () => {
+  const link = document.querySelector('#link-layout-viewer')
+  link.addEventListener('load', () => {
+    const template = link.import.querySelector('#tpl-viewer')
+    clone = document.importNode(template.content, true)
+    document.querySelector('#container').appendChild(clone)
+    injectContribution(ghUrl)
+    injectParentRepo(ghUrl)
+  })
+}
