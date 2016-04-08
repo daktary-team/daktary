@@ -88,7 +88,7 @@ CONTRIBUTIONS
 /*
 GITHUB MARKDOWN RE-DESIGN
 */
-#contribution table[data-table-type="yaml-metadata"],
+/*#contribution table[data-table-type="yaml-metadata"]*/
 #contribution svg.octicon {
   display: none;
 }
