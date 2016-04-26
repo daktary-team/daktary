@@ -2,28 +2,38 @@
 /*
 REPOSITORIES LIST
 */
-aside h3 {
-  margin-bottom: 20px;
-}
+
 #gh-crew-list ul {
-  padding-bottom: 20px;
+    display: flex;
+    flex-flow: row wrap;
+    padding-bottom: 20px;
+    justify-content: space-around;
 }
 #gh-crew-list li {
-  margin-bottom: 15px;
-  line-height: 1;
-  list-style-type: none;
-}
-#gh-crew-list li:before {
-  content: '> ';
+    width: 32%;
+    height: 220px;
+    padding: 2%;
+    margin: auto auto 15px;
+    line-height: 1;
+    list-style-type: none;    
+    background-color: #fff;
 }
 #gh-crew-list a {
-  color: #000;
-  text-decoration: none;
+    color: #000;
+    text-decoration: none;
 }
 #gh-crew-list a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 #gh-crew-list a.selected {
-  color: #9b4e4e;
-  font-weight: bold;
+    color: #9b4e4e;
+    font-weight: bold;
+}
+#gh-crew-list img {
+    display: block;
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    margin-bottom: 10px;    
+    background-color: #ccc;
 }

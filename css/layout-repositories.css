@@ -3,8 +3,22 @@ GENERAL
 */
 header {
   padding: 20px 0 30px;
-  border-bottom: 1px solid #000;
+/*  border-bottom: 1px solid #000;*/
 }
+header h1 {
+    float:  left;
+}
+.search-engine-wrapper{
+    float: right;
+    width: 33%;    
+}
+.home-intro {
+    padding: 10%;
+    margin-bottom: 40px;
+    text-align: center;
+    background-color: #fff;
+}
+/*
 aside {
   position: fixed;
   left: 0;
@@ -15,3 +29,4 @@ aside {
   background-color: #efefef;
   overflow-y: auto;
 }
+*/

@@ -20,7 +20,7 @@ template.crews.data = () => {
     `<ul>` +
        crews.map(({title, repo, label, link, owner, classAttr}) =>
         `<li><a title="${title}" class="${classAttr}" href="#${owner}"` +
-        ` data-owner="${owner}">${label}</a></li>`
+        ` data-owner="${owner}"><img src="" alt="">${label}</a></li>`
        ).join('\n') +
     `</ul>`)
 }

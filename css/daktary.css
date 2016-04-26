@@ -1,6 +1,14 @@
 /*
 GENERAL
 */
+
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+
 body {
   font-family: "Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana,sans-serif;
   font-size: 1rem;
@@ -12,6 +20,16 @@ body {
   margin: 0px auto;
   width: 620px;
 }
+
+.clearfix:before,
+.clearfix:after {
+  content:"";
+  display:table;
+}
+.clearfix:after {
+  clear:both;
+}
+
 p {
   margin-top: 0;
   margin-bottom: 10px;
@@ -24,3 +42,4 @@ h2,
 h3 {
   color: #9b4e4e;
 }
+

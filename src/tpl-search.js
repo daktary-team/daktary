@@ -3,7 +3,6 @@
 
   template.search.data = () => {
     template.search.html(`
-      <h2>Recherche</h2>
       <div class="search-engine">
         <fieldset>
           <input id="gh-search" type="text">
