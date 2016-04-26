@@ -1,0 +1,43 @@
+/*
+CONTRIBUTIONS LIST
+*/
+header h1 {
+  text-align: center;
+}
+
+/*list of article*/
+.gh-list {
+
+}
+.gh-list-item {
+  position: relative;
+  padding: 20px 0;
+}
+.gh-list-item:not(:last-child) {
+  margin-bottom: 30px;
+}
+.gh-list-item:not(:last-child):after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  width: 25%;
+  height: 1px;
+  margin: auto;
+  background: #000;
+}
+.gh-list-title {
+  margin-top: 0;
+  margin-bottom: 15px;
+  line-height: 1;
+/*  text-transform: uppercase;*/
+}
+.gh-list-meta {
+  margin-bottom: 10px;
+  font-size: 0.8em;
+}
+.gh-list-meta p {
+  margin: 0;
+}

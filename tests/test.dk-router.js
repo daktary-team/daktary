@@ -23,6 +23,22 @@ describe('#Router', () => {
     router.go('multibao/contributions/tree/master/contributions')
     expect(router.currentRoute).to.be('tree')
   }),
+  it('should return blob for github blob url', () => {
+    const router = new Router()
+    router.route(':owner/:repo/blob/:branch/:path(.*)', function () {
+      this.currentRoute = 'blob'
+    })
+    router.go('multibao/contributions/blob/master/contributions/test')
+    expect(router.currentRoute).to.be('blob')
+  }),
+  it('should return right path for github blob url', () => {
+    const router = new Router()
+    router.route(':owner/:repo/blob/:branch/:path(.*)', function () {
+      this.currentRoute = 'blob'
+    })
+    router.go('che-mical/warp/blob/master/_posts/2014-coder-en-taule.markdown')
+    expect(router.currentRoute).to.be('blob')
+  }),
   it('should return tree for github tree url without path', () => {
     const router = new Router()
     router.route(':owner/:repo/tree/:branch/:path(.*)?', function () {

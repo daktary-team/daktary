@@ -12,19 +12,18 @@ Tests unitaires :
 * [Expect](https://github.com/Automattic/expect.js)
 
 ## À prévoir
+* vrai SLA
 * Travis
 * Classement des dossiers
 * Liens après un fork
 * Home
 * Nombre de contributions
 * Notifications
-* vrai SLA
-* Template
 * Meta-Data : Contribs - Repos - Folders
-* Repos list
 * Cacher autres que .md
 * Loading
 * Infinite scroll
+* Ressources : réponses not found => 404
 
 ## Pour tester le site en local
 ```bash
@@ -62,5 +61,8 @@ http://127.0.0.1:8000/tests
 * Affichage fiches (typo, justified text)
 * Fiche : liens -> couleurs, title hover
 * Responsive : mobile first ?
+* notification : ex. aucune fiche trouvée
+
+* Simplify tests writes merge on async
 
 ## Discussion intégration

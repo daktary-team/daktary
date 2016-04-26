@@ -1,0 +1,11 @@
+/*breadcrumbs*/
+.breadcrumb {
+  padding: 20px 0;
+}
+.breadcrumb li {
+  display: inline-block;
+  list-style-type: none;
+}
+.breadcrumb li:not(:first-child):before {
+  content: '> ';
+}

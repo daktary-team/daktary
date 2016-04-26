@@ -1,0 +1,8 @@
+/*header with search engine*/
+.search-engine-wrapper {
+
+}
+.search-engine-wrapper input[type="text"] {
+  padding: 5px;
+  width: calc(100% - 105px);
+}

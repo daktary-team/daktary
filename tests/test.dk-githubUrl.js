@@ -16,7 +16,7 @@ describe('#GhUrl', () => {
       {owner: 'multibao', repo: 'contributions'})
     expect(githubQuery.toGhApiSearch('jardin').startsWith(
       'https://api.github.com/search/code?q=jardin+' +
-      'language:Markdown+repo:multibao/contributions'
+      'language:Markdown+user:multibao'
     )).to.be(true)
   })
 })

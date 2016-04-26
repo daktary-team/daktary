@@ -18,14 +18,20 @@ class GithubUrl {
     }
   }
   toGhApiSearch(query) {
-    const {keys, owner, repo} = this.ghData
+    const {owner} = this.ghData
     return `https://api.github.com/search/code` +
-           `?q=${query}+language:Markdown+repo:${owner}/${repo}`
+           `?q=${query}+language:Markdown+user:${owner}`
   }
   toGhApiUrl() {
     const {keys, owner, repo, branch, path} = this.ghData
+    const branchParam = !! branch ? `ref=${branch}&` : ''
     return `https://api.github.com` +
            `/repos/${owner}/${repo}/contents${path}` +
-           `?ref=${branch}&client_id=${keys.id}&client_secret=${keys.secret}`
+           `?${branchParam}client_id=${keys.id}&client_secret=${keys.secret}`
+  }
+  toGhRepoApiUrl() {
+    const {keys, owner} = this.ghData
+    return `https://api.github.com/users/${owner}/repos` +
+           `?client_id=${keys.id}&client_secret=${keys.secret}`
   }
 }

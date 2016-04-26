@@ -1,0 +1,17 @@
+/*
+GENERAL
+*/
+header {
+  padding: 20px 0 30px;
+  border-bottom: 1px solid #000;
+}
+aside {
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 15px;
+  height: 100%;
+  max-width: 25%;
+  background-color: #efefef;
+  overflow-y: auto;
+}

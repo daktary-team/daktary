@@ -10,20 +10,30 @@
   <script src="../vendors/mocha/mocha.js"></script>
   <script>mocha.setup('bdd')</script>
 
-  <script src="../config.js"></script>
+  <script src="../src/config.js"></script>
   <!-- Test the main lib -->
-  <script src="../lib/dk-githubUrl.js"></script>
-  <script src="../lib/dk-router.js"></script>
+  <script src="../src/lib/dk-githubUrl.js"></script>
+  <script src="../src/lib/dk-router.js"></script>
+  <script src="../src/lib/dk-layout.js"></script>
+  <script src="../src/lib/dk-template.js"></script>
   <script src="test.dk-githubUrl.js"></script>
   <script src="test.dk-router.js"></script>
-  <!-- Test the viewer -->
-  <script src="../component-contribution.js"></script>
-  <script src="test.component-contribution.js"></script>
-  <!-- Test the repos -->
-  <script src="../component-repositories.js"></script>
-  <script src="test.component-repositories.js"></script>
-  <script src="../component-breadcrumb.js"></script>
-  <script src="test.component-breadcrumb.js"></script>
+  <script src="test.dk-layout.js"></script>
+  <script src="test.dk-template.js"></script>
+  <script src="test.tpl-contribution.js"></script>
+  <script src="../src/tpl-contribution.js"></script>
+  <script src="../src/tpl-crews.js"></script>
+  <script src="test.tpl-crews.js"></script>
+  <script src="../src/tpl-search.js"></script>
+  <script src="test.tpl-search.js"></script>
+  <script src="../src/tpl-breadcrumb.js"></script>
+  <script src="test.tpl-breadcrumb.js"></script>
+  <script src="../src/tpl-folders.js"></script>
+  <script src="test.tpl-folders.js"></script>
+  <script src="../src/tpl-repos.js"></script>
+  <script src="test.tpl-repos.js"></script>
+  <script src="../src/tpl-searchList.js"></script>
+  <script src="test.tpl-searchList.js"></script>
   <script>
     mocha.checkLeaks()
     mocha.run()
