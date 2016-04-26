@@ -17,10 +17,11 @@
             `<article class="gh-list-item gh-type-repo">
                <h2 class="gh-list-title"><a href="#${url}">${name}</a></h2>
                <div class="gh-list-meta">
-                 <p>Mis à jour : 02/02/16</p>
-                 <p>Créé par : <a href="">pntbr</a> / Contributeurs les plus actifs :
-                   <a href="">pntbr</a> / <a href="">wolffgang</a>
+                 <p>3 dossiers - 18 fiches</p>
+                 <p>Contributeurs :
+                   <a href="">pntbr</a>, <a href="">wolffgang</a>
                  </p>
+                 <p><a href="">Demander un accès contributeur à ce dépot de fiches</a></p>
                  <p>
                    <a href="${git_url}">Voir sur Github</a>
                  </p>
@@ -30,8 +31,7 @@
                <!--/si image-->
                <p class="gh-list-excerpt">Le début de la fiche qui parle de ...</p>
                <a class="gh-list-readmore"
-                  title="Lire la suite de la fiche Titre de la fiche"
-                  href="${url}">Lire la fiche</a>
+                  href="${url}">Lire la présentation complète</a>
              </article>`).join('\n')
         )
         template.repos.renderAsync(template.repos._htmlTpl)
