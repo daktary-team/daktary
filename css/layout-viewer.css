@@ -1,0 +1,22 @@
+.viewer-actions {
+  position: fixed;
+  margin-top: 26px;
+  margin-left: -30px;
+  width: 16px;
+  height: calc(100vh - 56px);
+}
+
+.viewer-actions > a {
+  position: absolute;
+  bottom: 80px;
+}
+
+.viewer-actions li {
+  margin-bottom: 20px;
+  list-style-type: none;
+}
+
+.viewer-actions img {
+  width: 100%;  
+  opacity: .6;
+}
