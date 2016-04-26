@@ -18,6 +18,22 @@ header h1 {
     text-align: center;
     background-color: #fff;
 }
+.home-intro h2 {
+    margin-bottom: 20px;
+}
+.home-intro a {
+    padding: 10px;
+    color: #fff;
+    background-color: #9b4e4e;
+    text-decoration: none;
+    transition: all .3s
+}
+.home-intro a:hover {
+    opacity: .8;
+}
+.home-intro a + a {
+    margin-left: 20px;
+}
 /*
 aside {
   position: fixed;

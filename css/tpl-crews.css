@@ -25,10 +25,12 @@ REPOSITORIES LIST
 #gh-crew-list a:hover {
     text-decoration: underline;
 }
+/*
 #gh-crew-list a.selected {
     color: #9b4e4e;
     font-weight: bold;
 }
+*/
 #gh-crew-list img {
     display: block;
     width: 100%;
