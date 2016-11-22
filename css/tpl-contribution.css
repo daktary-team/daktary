@@ -18,7 +18,7 @@ CONTRIBUTIONS
   opacity: .8;
 }
 .github-link,
-.proseio-link,
+.edit-link,
 .help-link {
   width: 20px;
   height: 20px;
@@ -29,7 +29,7 @@ CONTRIBUTIONS
   background: url(../img/ico-github.svg) 0 0 no-repeat;
   background-size: 16px;
 }
-.proseio-link {
+.edit-link {
   margin-bottom: 5px;
   background: url(../img/ico-pencil.svg) 0 0 no-repeat;
   background-size: 16px;
@@ -141,7 +141,6 @@ CONTRIBUTIONS
   top: 0;
   font-weight: bold;
 }
-
 #contribution ol {
   padding-left: 0;
   counter-reset: section;

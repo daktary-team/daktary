@@ -1,5 +1,5 @@
 {
-  const htmlSearch = ({url, title, authors, prose_url, git_url, image_url, description}) =>
+  const htmlSearch = ({url, title, authors, image_url, description}) =>
     `<article class="gh-list-item gh-type-file">
        <h2 class="gh-list-title"><a href="#${url}">${title}</a></h2>
        <div class="gh-list-content">
@@ -19,13 +19,13 @@
     const [req, query, user] = router.queries.q
       .match(/(.*)\+language:Markdown\+user:([0-9A-Za-z\u00C0-\u017F\-\_\.]*)/)
     router.params.owner = user
-    const ghApi = new GithubUrl(router.params)
+    const githubApi = new GithubUrl(router.params)
     const html = []
-    ghApi.getJsonSearch(query).then(jsonResponse => {
+    githubApi.getJsonSearch(query).then(jsonResponse => {
       jsonResponse.items.map(({name, path, html_url, repository}) => {
         const readmeUrl = {owner: router.params.owner, repo: repository.name, branch: 'master', path: path}
-        const ghApiBlob = new GithubUrl(readmeUrl)
-        ghApiBlob.getMdBlob()
+        const githubApiBlob = new GithubUrl(readmeUrl)
+        githubApiBlob.getMdBlob()
           .then(mdResponse => {
             const contribution = new Markdown(mdResponse)
             const metas = contribution.isMetas() ?

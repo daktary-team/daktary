@@ -23,6 +23,9 @@ class Router {
   _go503() {
     window.location = './503.html'
   }
+  go404() {
+    window.location = './404.html'
+  }
   _urlWithoutParams() {
     return this.url.split('?')[0]
   }
@@ -108,7 +111,11 @@ class Router {
     this._resetRoute()
     this.url = url || '/'
     this._findAndSetCurrentRoute()
-    this.injectLayout()
+    if (this.isNoRoute()) {
+      this.go404()
+    } else {
+      this.injectLayout()
+    }
   }
   route(pattern, action) {
     this._routes.push({

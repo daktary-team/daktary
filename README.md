@@ -2,7 +2,7 @@
 
 ## US en cours
 
-US1
+US-A1
 
 ## Serveurs
 Prod : http://www.multibao.org
@@ -89,7 +89,3 @@ Vincent Agnano : Anywhere
 ### Discussion intégration
 * Regarder GitBook
 * Affichage fiches : [exemple des balises HTML](http://dev.multibao.org/#newick/grill/blob/master/styleguide.md)
-
-## Pull Request
-
-#US1 Personnaliser sa version de daktary

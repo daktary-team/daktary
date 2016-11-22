@@ -6,7 +6,7 @@
    */
 class GithubUrl {
   constructor({owner, repo, branch, path}) {
-    this.ghData = {
+    this.githubData = {
       keys: {
         secret: atob(GH.SECRET),
         id: atob(GH.ID )
@@ -37,74 +37,95 @@ class GithubUrl {
     })
     return dirs.concat(files)
   }
-  toGhApiSearch(query) {
-    const {owner} = this.ghData
+  toGithubApiSearch(query) {
+    const {owner} = this.githubData
     return `https://api.github.com/search/code` +
            `?q=${query}+language:Markdown+user:${owner}`
   }
-  toGhApiUrl() {
-    const {keys, owner, repo, branch, path} = this.ghData
+  toGithubApiUrl() {
+    const {keys, owner, repo, branch, path} = this.githubData
     const branchParam = !! branch ? `ref=${branch}&` : ''
     return `https://api.github.com` +
            `/repos/${owner}/${repo}/contents${path}` +
            `?${branchParam}client_id=${keys.id}&client_secret=${keys.secret}`
   }
-  toGhRepoApiUrl() {
-    const {keys, owner} = this.ghData
+  toGithubRepoApiUrl() {
+    const {keys, owner} = this.githubData
     return `https://api.github.com/users/${owner}/repos` +
            `?client_id=${keys.id}&client_secret=${keys.secret}`
   }
-  getProseUrl() {
-    const {owner, repo, branch, path} = this.ghData
-    return `http://prose.io/#${owner}/${repo}/edit/${branch}${path}`
+  getGithubApiEditUrl() {
+    const {owner, repo, branch, path} = this.githubData
+    return `https://github.com/${owner}/${repo}/edit/${branch}${path}`
   }
-  getGhUrl() {
-    const {owner, repo, branch, path} = this.ghData
+  getGithubApiUrl() {
+    const {owner, repo, branch, path} = this.githubData
     return `https://github.com/${owner}/${repo}/blob/${branch}${path}`
   }
   getHtmlBlob() {
     return new Promise(
       (resolve, reject) => {
-        fetch(this.toGhApiUrl(), {headers: {Accept: 'application/vnd.github.v3.html'}})
-          .then(response => response.text())
+        fetch(this.toGithubApiUrl(), {headers: {Accept: 'application/vnd.github.v3.raw'}})
+          .then(response => {
+            if (response.ok) {
+              return response.text()
+            } else {
+              router.go404()
+            }
+          })
           .then(htmlResponse => {
-            resolve(htmlResponse)
+            resolve(marked(htmlResponse))
+          })
+          .catch(error => {
+            throw error
           })
       })}
   getMdBlob() {
     return new Promise(
       (resolve, reject) => {
-        fetch(this.toGhApiUrl(), {headers: {Accept: 'application/vnd.github.v3.raw'}})
+        fetch(this.toGithubApiUrl(), {headers: {Accept: 'application/vnd.github.v3.raw'}})
           .then(response => response.text())
           .then(mdResponse => {
             resolve(mdResponse)
+          })
+          .catch(error => {
+            throw error
           })
       })}
   getJsonRepo() {
     return new Promise(
       (resolve, reject) => {
-        fetch(this.toGhRepoApiUrl(), {headers: {Accept: 'application/vnd.github.v3'}})
+        fetch(this.toGithubRepoApiUrl(), {headers: {Accept: 'application/vnd.github.v3'}})
           .then(response => response.json())
           .then(json => {
             resolve(json)
+          })
+          .catch(error => {
+            throw error
           })
       })}
   getJsonSearch(query) {
     return new Promise(
       (resolve, reject) => {
-        fetch(this.toGhApiSearch(query), {headers: {Accept: 'application/vnd.github.v3.html'}})
+        fetch(this.toGithubApiSearch(query), {headers: {Accept: 'application/vnd.github.v3.html'}})
           .then(response => response.json())
           .then(json => {
             resolve(json)
+          })
+          .catch(error => {
+            throw error
           })
       })}
   getJsonFolders() {
     return new Promise(
       (resolve, reject) => {
-        fetch(this.toGhApiUrl(), {headers: {Accept: 'application/vnd.github.v3'}})
+        fetch(this.toGithubApiUrl(), {headers: {Accept: 'application/vnd.github.v3'}})
           .then(response => response.json())
           .then(json => {
             resolve(this._listByFolder(this._listMd(json)))
+          })
+          .catch(error => {
+            throw error
           })
       })}
 }

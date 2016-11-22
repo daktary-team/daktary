@@ -19,7 +19,7 @@ var GithubUrl = function () {
 
     _classCallCheck(this, GithubUrl);
 
-    this.ghData = {
+    this.githubData = {
       keys: {
         secret: atob(GH.SECRET),
         id: atob(GH.ID)
@@ -56,53 +56,53 @@ var GithubUrl = function () {
       return dirs.concat(files);
     }
   }, {
-    key: 'toGhApiSearch',
-    value: function toGhApiSearch(query) {
-      var owner = this.ghData.owner;
+    key: 'toGithubApiSearch',
+    value: function toGithubApiSearch(query) {
+      var owner = this.githubData.owner;
 
       return 'https://api.github.com/search/code' + ('?q=' + query + '+language:Markdown+user:' + owner);
     }
   }, {
-    key: 'toGhApiUrl',
-    value: function toGhApiUrl() {
-      var _ghData = this.ghData;
-      var keys = _ghData.keys;
-      var owner = _ghData.owner;
-      var repo = _ghData.repo;
-      var branch = _ghData.branch;
-      var path = _ghData.path;
+    key: 'toGithubApiUrl',
+    value: function toGithubApiUrl() {
+      var _githubData = this.githubData;
+      var keys = _githubData.keys;
+      var owner = _githubData.owner;
+      var repo = _githubData.repo;
+      var branch = _githubData.branch;
+      var path = _githubData.path;
 
       var branchParam = !!branch ? 'ref=' + branch + '&' : '';
       return 'https://api.github.com' + ('/repos/' + owner + '/' + repo + '/contents' + path) + ('?' + branchParam + 'client_id=' + keys.id + '&client_secret=' + keys.secret);
     }
   }, {
-    key: 'toGhRepoApiUrl',
-    value: function toGhRepoApiUrl() {
-      var _ghData2 = this.ghData;
-      var keys = _ghData2.keys;
-      var owner = _ghData2.owner;
+    key: 'toGithubRepoApiUrl',
+    value: function toGithubRepoApiUrl() {
+      var _githubData2 = this.githubData;
+      var keys = _githubData2.keys;
+      var owner = _githubData2.owner;
 
       return 'https://api.github.com/users/' + owner + '/repos' + ('?client_id=' + keys.id + '&client_secret=' + keys.secret);
     }
   }, {
-    key: 'getProseUrl',
-    value: function getProseUrl() {
-      var _ghData3 = this.ghData;
-      var owner = _ghData3.owner;
-      var repo = _ghData3.repo;
-      var branch = _ghData3.branch;
-      var path = _ghData3.path;
+    key: 'getGithubApiEditUrl',
+    value: function getGithubApiEditUrl() {
+      var _githubData3 = this.githubData;
+      var owner = _githubData3.owner;
+      var repo = _githubData3.repo;
+      var branch = _githubData3.branch;
+      var path = _githubData3.path;
 
-      return 'http://prose.io/#' + owner + '/' + repo + '/edit/' + branch + path;
+      return 'https://github.com/' + owner + '/' + repo + '/edit/' + branch + path;
     }
   }, {
-    key: 'getGhUrl',
-    value: function getGhUrl() {
-      var _ghData4 = this.ghData;
-      var owner = _ghData4.owner;
-      var repo = _ghData4.repo;
-      var branch = _ghData4.branch;
-      var path = _ghData4.path;
+    key: 'getGithubApiUrl',
+    value: function getGithubApiUrl() {
+      var _githubData4 = this.githubData;
+      var owner = _githubData4.owner;
+      var repo = _githubData4.repo;
+      var branch = _githubData4.branch;
+      var path = _githubData4.path;
 
       return 'https://github.com/' + owner + '/' + repo + '/blob/' + branch + path;
     }
@@ -112,10 +112,16 @@ var GithubUrl = function () {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
-        fetch(_this.toGhApiUrl(), { headers: { Accept: 'application/vnd.github.v3.html' } }).then(function (response) {
-          return response.text();
+        fetch(_this.toGithubApiUrl(), { headers: { Accept: 'application/vnd.github.v3.raw' } }).then(function (response) {
+          if (response.ok) {
+            return response.text();
+          } else {
+            router.go404();
+          }
         }).then(function (htmlResponse) {
-          resolve(htmlResponse);
+          resolve(marked(htmlResponse));
+        }).catch(function (error) {
+          throw error;
         });
       });
     }
@@ -125,10 +131,12 @@ var GithubUrl = function () {
       var _this2 = this;
 
       return new Promise(function (resolve, reject) {
-        fetch(_this2.toGhApiUrl(), { headers: { Accept: 'application/vnd.github.v3.raw' } }).then(function (response) {
+        fetch(_this2.toGithubApiUrl(), { headers: { Accept: 'application/vnd.github.v3.raw' } }).then(function (response) {
           return response.text();
         }).then(function (mdResponse) {
           resolve(mdResponse);
+        }).catch(function (error) {
+          throw error;
         });
       });
     }
@@ -138,10 +146,12 @@ var GithubUrl = function () {
       var _this3 = this;
 
       return new Promise(function (resolve, reject) {
-        fetch(_this3.toGhRepoApiUrl(), { headers: { Accept: 'application/vnd.github.v3' } }).then(function (response) {
+        fetch(_this3.toGithubRepoApiUrl(), { headers: { Accept: 'application/vnd.github.v3' } }).then(function (response) {
           return response.json();
         }).then(function (json) {
           resolve(json);
+        }).catch(function (error) {
+          throw error;
         });
       });
     }
@@ -151,10 +161,12 @@ var GithubUrl = function () {
       var _this4 = this;
 
       return new Promise(function (resolve, reject) {
-        fetch(_this4.toGhApiSearch(query), { headers: { Accept: 'application/vnd.github.v3.html' } }).then(function (response) {
+        fetch(_this4.toGithubApiSearch(query), { headers: { Accept: 'application/vnd.github.v3.html' } }).then(function (response) {
           return response.json();
         }).then(function (json) {
           resolve(json);
+        }).catch(function (error) {
+          throw error;
         });
       });
     }
@@ -164,10 +176,12 @@ var GithubUrl = function () {
       var _this5 = this;
 
       return new Promise(function (resolve, reject) {
-        fetch(_this5.toGhApiUrl(), { headers: { Accept: 'application/vnd.github.v3' } }).then(function (response) {
+        fetch(_this5.toGithubApiUrl(), { headers: { Accept: 'application/vnd.github.v3' } }).then(function (response) {
           return response.json();
         }).then(function (json) {
           resolve(_this5._listByFolder(_this5._listMd(json)));
+        }).catch(function (error) {
+          throw error;
         });
       });
     }
@@ -325,6 +339,11 @@ var Router = function () {
       window.location = './503.html';
     }
   }, {
+    key: 'go404',
+    value: function go404() {
+      window.location = './404.html';
+    }
+  }, {
     key: '_urlWithoutParams',
     value: function _urlWithoutParams() {
       return this.url.split('?')[0];
@@ -428,7 +447,11 @@ var Router = function () {
       this._resetRoute();
       this.url = url || '/';
       this._findAndSetCurrentRoute();
-      this.injectLayout();
+      if (this.isNoRoute()) {
+        this.go404();
+      } else {
+        this.injectLayout();
+      }
     }
   }, {
     key: 'route',
@@ -529,27 +552,31 @@ var Template = function () {
 var template = {};
 var layout = {};
 
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: false,
+  smartLists: true,
+  smartypants: false
+});
+
 window.addEventListener('hashchange', function () {
-  var ghUrl = window.location.toString().split('#')[1];
-  var anchor = document.querySelector('a[name="' + ghUrl + '"]');
+  var githubUrl = window.location.toString().split('#')[1];
+  var anchor = document.querySelector('a[name="' + githubUrl + '"]');
   document.querySelector('.search-engine').style.display = '';
   if (anchor) {
     anchor.scrollIntoView();
     window.location = '#' + router.url;
   } else {
-    router.go(ghUrl);
-    if (undefined.currentRoute !== 'home') {
-      window.location = '#' + ghUrl;
-    }
+    router.go(githubUrl);
   }
 });
 window.addEventListener('load', function () {
-  var ghUrl = window.location.toString().split('#')[1];
-  router.go(ghUrl);
-  if (router.isNoRoute()) {
-    window.location = './404.html';
-    window.location.reload(true);
-  }
+  var githubUrl = window.location.toString().split('#')[1];
+  router.go(githubUrl);
   document.querySelector('#button-gh-search').addEventListener('click', function (evt) {
     if (document.querySelector('#gh-search').value.length > 2) {
       var userQuery = document.querySelector('#gh-search').value;
@@ -571,46 +598,48 @@ window.addEventListener('load', function () {
  * Layout for manage and display Github repositories.
  *
  */
-{
-  layout.folders = new Layout('folders');
-  layout.folders.html('\n  <main class="container">\n    <div id="breadcrumb" class="breadcrumb" data-template="breadcrumb">\n    </div>\n    <section id="gh-list" class="gh-list" data-template="folders">\n    </section>\n  </main>');
-}
-'use strict';
-
-{
-  layout.home = new Layout('home');
-  layout.home.html('\n  <main>\n    <section class="home-intro">\n        <div class="home-intro-content container">\n          <h2>' + MULTIBAO.UVP1 + '<span>' + MULTIBAO.UVP2 + '</span></h2>\n          <div>\n            <a href="#multibao/contributions/blob/master/pages/commencer_ici.md">' + MULTIBAO.BUTTON1 + '</a>\n          </div>\n          <div>\n            <a href="#multibao/documentation/blob/master/README.md">' + MULTIBAO.BUTTON2 + '</a>\n          </div>\n        </div>\n    </section>\n    <section id="gh-crew-list" class="container">\n      <ul data-template="crews">\n      </ul>\n    </section>\n  </main>');
-}
+layout.folders = new Layout('folders');
+layout.folders.html('\n<main class="container">\n  <div id="breadcrumb" class="breadcrumb" data-template="breadcrumb">\n  </div>\n  <section id="gh-list" class="gh-list" data-template="folders">\n  </section>\n</main>');
 'use strict';
 
 /**
- * Layout for manage and display Github repositories.
- *
- */
-{
-  layout.repos = new Layout('repos');
-  layout.repos.html('\n  <main class="container">\n    <div id="breadcrumb" class="breadcrumb" data-template="breadcrumb">\n    </div>\n    <section id="gh-list" class="gh-list" data-template="repos">\n    </section>\n  </main>');
-}
+* Layout for home page.
+*
+*/
+layout.home = new Layout('home');
+layout.home.html('\n<main>\n  <section class="home-intro">\n      <div class="home-intro-content container">\n        <h2>' + MULTIBAO.UVP1 + '<span>' + MULTIBAO.UVP2 + '</span></h2>\n        <div>\n          <a href="#multibao/contributions/blob/master/pages/commencer_ici.md">' + MULTIBAO.BUTTON1 + '</a>\n        </div>\n        <div>\n          <a href="#multibao/documentation/blob/master/README.md">' + MULTIBAO.BUTTON2 + '</a>\n        </div>\n      </div>\n  </section>\n  <section id="gh-crew-list" class="container">\n    <ul data-template="crews">\n    </ul>\n  </section>\n</main>');
 'use strict';
 
 /**
- * Layout for manage and display Github repositories.
- *
- */
-{
-  layout.searchList = new Layout('searchList');
-  layout.searchList.html('\n  <main class="container">\n    <!--\n    <section class="search-result search-result-blank">\n    il n\'y a pas de résultat pour la recherche <span>agilité</span> dans le repo <a href=""> Super repo de démo</a>\n    </section>\n    <section class="search-result">\n      <span>3</span> résultat(s) pour la recherche <span>agilité</span> dans le repo <a href=""> Super repo de démo</a>\n    </section>\n    -->\n    <section id="gh-list" class="gh-list" data-template="searchList">\n    </section>\n  </main>');
-}
+* Layout for manage and display Github repositories.
+*
+*/
+layout.repositories = new Layout('repositories');
+layout.repositories.html('\n<main class="container">\n  <div id="breadcrumb" class="breadcrumb" data-template="breadcrumb">\n  </div>\n  <section id="gh-list" class="gh-list" data-template="repositories">\n  </section>\n</main>');
+'use strict';
+
+/**
+* Layout for manage and display Github repositories.
+*
+*/
+layout.searchList = new Layout('searchList');
+layout.searchList.html('\n<main class="container">\n  <!--\n  <section class="search-result search-result-blank">\n  il n\'y a pas de résultat pour la recherche <span>agilité</span> dans le repo <a href=""> Super repo de démo</a>\n  </section>\n  <section class="search-result">\n    <span>3</span> résultat(s) pour la recherche <span>agilité</span> dans le repo <a href=""> Super repo de démo</a>\n  </section>\n  -->\n  <section id="gh-list" class="gh-list" data-template="searchList">\n  </section>\n</main>');
 'use strict';
 
 /**
 * Layout for manage and display Github contribution.
 *
 */
-{
-  layout.viewer = new Layout('viewer');
-  layout.viewer.html('\n    <main data-template="contribution" class="container">\n    </main>\n  ');
-}
+layout.contribution = new Layout('contribution');
+layout.contribution.html('\n  <main data-template="contribution" class="container">\n  </main>\n');
+'use strict';
+
+/**
+* Layout for contribution editor.
+*
+*/
+layout.editor = new Layout('editor');
+layout.editor.html('\n  <main data-template="editor" class="container">\n  </main>\n');
 'use strict';
 
 // Create a router
@@ -624,23 +653,32 @@ router.route('/', function () {
 router.route('search/code', function () {
   this.currentRoute = 'search';
   layout.searchList.render();
+  document.querySelector('header').style.display = '';
 });
 router.route(':owner/:repo/blob/:branch/:path(.*)', function () {
   this.currentRoute = 'blob';
-  layout.viewer.render();
+  layout.contribution.render();
+  document.querySelector('header').style.display = 'none';
+});
+router.route(':owner/:repo/edit/:branch/:path(.*)', function () {
+  this.currentRoute = 'edit';
+  layout.editor.render();
   document.querySelector('header').style.display = 'none';
 });
 router.route(':owner/:repo/tree/:branch/:path(.*)?', function () {
   this.currentRoute = 'tree';
   layout.folders.render();
+  document.querySelector('header').style.display = '';
 });
 router.route(':owner/:repo', function () {
   this.currentRoute = 'list';
   layout.folders.render();
+  document.querySelector('header').style.display = '';
 });
 router.route(':owner', function () {
   this.currentRoute = 'repos';
-  layout.repos.render();
+  layout.repositories.render();
+  document.querySelector('header').style.display = '';
 });
 'use strict';
 
@@ -695,14 +733,14 @@ router.route(':owner', function () {
       var link = _ref.link;
       var label = _ref.label;
       var content = _ref.content;
-      var prose_url = _ref.prose_url;
-      var git_url = _ref.git_url;
-      return '\n    <a name="top"></a>\n    <aside class="contribution-tools">\n      <a href="' + git_url + '" title="Voir sur Github" class="github-link tooltip"></a>\n      <a href="' + prose_url + '" title="Editer sur prose.io" class="proseio-link tooltip"></a>\n      <a href="#multibao/documentation/blob/master/README.md" title="Aide" class="help-link tooltip"></a>\n      <a href="#top" class="page-top">Haut de page</a>\n    </aside>\n    <div id="parentRepo" class="breadcrumbs">\n      À retrouver dans le dépôt : <a href="' + link + '">' + label + '</a>\n    </div>\n    <article id="contribution">\n      ' + content + '\n    </article>\n  ';
+      var edit_url = _ref.edit_url;
+      var github_url = _ref.github_url;
+      return '\n    <a name="top"></a>\n    <aside class="contribution-tools">\n      <a href="' + github_url + '" title="Voir sur Github" class="github-link tooltip"></a>\n      <a href="#multibao/documentation/blob/master/README.md" title="Aide" class="help-link tooltip"></a>\n      <a href="#top" class="page-top">Haut de page</a>\n    </aside>\n    <div id="parentRepo" class="breadcrumbs">\n      À retrouver dans le dépôt : <a href="' + link + '">' + label + '</a>\n    </div>\n    <article id="contribution">\n      ' + content + '\n    </article>\n  ';
     };
     template.contribution = new Template('contribution');
     template.contribution.data = function () {
-      var ghApi = new GithubUrl(router.params);
-      ghApi.getHtmlBlob().then(function (htmlResponse) {
+      var githubApi = new GithubUrl(router.params);
+      githubApi.getHtmlBlob().then(function (htmlResponse) {
         var _router$params = router.params;
         var owner = _router$params.owner;
         var repo = _router$params.repo;
@@ -710,14 +748,51 @@ router.route(':owner', function () {
         var path = _router$params.path;
 
         var data = {
-          git_url: ghApi.getGhUrl(),
-          prose_url: ghApi.getProseUrl(),
+          github_url: githubApi.getGithubApiUrl(),
+          edit_url: '#' + router.url.replace('blob', 'edit'),
           content: htmlResponse,
           link: '#' + owner + '/' + repo + '/tree/' + branch + '/' + ('' + path.replace(/(\/|)[0-9A-Za-z\u00C0-\u017F\-\_\.]*$/, '')),
           label: owner + ' - ' + repo
         };
         template.contribution.html(html(data));
         template.contribution.renderAsync();
+      });
+    };
+  })();
+}
+'use strict';
+
+{
+  (function () {
+    var html = function html(_ref) {
+      var link = _ref.link;
+      var label = _ref.label;
+      var content = _ref.content;
+      var edit_url = _ref.edit_url;
+      var github_url = _ref.github_url;
+      var row = _ref.row;
+      return '\n    <a name="top"></a>\n    <aside class="contribution-tools">\n      <a href="' + github_url + '" title="Voir sur Github" class="github-link tooltip"></a>\n      <a href="' + edit_url + '" title="Editer sur github" class="edit-link tooltip"></a>\n      <a href="#multibao/documentation/blob/master/README.md" title="Aide" class="help-link tooltip"></a>\n      <a href="#top" class="page-top">Haut de page</a>\n    </aside>\n    <div id="parentRepo" class="breadcrumbs">\n      À retrouver dans le dépôt : <a href="' + link + '">' + label + '</a>\n    </div>\n    <article id="contribution">\n        <label for="commit-message">Description de la modification</label>\n        <input id="commit-message" placeholder="Modification" name="message" autocomplete="off" type="text">\n        <textarea id="commit-description" name="description" placeholder="Ajout d\'une description additionnelle"></textarea>\n        <button type="submit" id="submit-file">Enregistrer sur Github</button>\n        <textarea rows="' + row + '" cols="72">' + content + '</textarea>\n    </article>\n  ';
+    };
+    template.editor = new Template('editor');
+    template.editor.data = function () {
+      var githubApi = new GithubUrl(router.params);
+      githubApi.getMdBlob().then(function (htmlResponse) {
+        var _router$params = router.params;
+        var owner = _router$params.owner;
+        var repo = _router$params.repo;
+        var branch = _router$params.branch;
+        var path = _router$params.path;
+
+        var data = {
+          github_url: githubApi.getGithubApiUrl(),
+          edit_url: '#' + router.url.replace('edit', 'blob'),
+          content: htmlResponse,
+          link: '#' + owner + '/' + repo + '/tree/' + branch + '/' + ('' + path.replace(/(\/|)[0-9A-Za-z\u00C0-\u017F\-\_\.]*$/, '')),
+          label: owner + ' - ' + repo,
+          row: htmlResponse.split('\n').length * 1.4
+        };
+        template.editor.html(html(data));
+        template.editor.renderAsync();
       });
     };
   })();
@@ -742,16 +817,16 @@ router.route(':owner', function () {
 
     template.crews = new Template('crews');
     template.crews.data = function () {
-      var ghApi = new GithubUrl({ owner: GH.OWNER, repo: GH.CREW });
+      var githubApi = new GithubUrl({ owner: GH.OWNER, repo: GH.CREW });
       var html = [];
-      ghApi.getJsonFolders().then(function (jsonResponse) {
+      githubApi.getJsonFolders().then(function (jsonResponse) {
         jsonResponse.map(function (elt) {
           if (elt.name === 'README.md') {
             return;
           }
           var readmeUrl = { owner: GH.OWNER, repo: GH.CREW, branch: 'master', path: elt.name };
-          var ghApiBlob = new GithubUrl(readmeUrl);
-          ghApiBlob.getMdBlob().then(function (mdResponse) {
+          var githubApiBlob = new GithubUrl(readmeUrl);
+          githubApiBlob.getMdBlob().then(function (mdResponse) {
             var contribution = new Markdown(mdResponse);
             if (contribution.isMetas()) {
               var metas = {
@@ -777,8 +852,7 @@ router.route(':owner', function () {
       var url = _ref.url;
       var title = _ref.title;
       var authors = _ref.authors;
-      var git_url = _ref.git_url;
-      var prose_url = _ref.prose_url;
+      var github_url = _ref.github_url;
       var image_url = _ref.image_url;
       var description = _ref.description;
       return '<article class="gh-list-item gh-type-file">\n       ' + (image_url ? '<img src="' + image_url + '">' : '') + '\n       <h2 class="gh-list-title"><a href="#' + url + '">' + title + '</a></h2>\n       <div class="gh-list-content">\n         <div class="gh-list-meta">\n           ' + (authors ? '<p>Mise à jour par : ' + authors + '</p>' : '') + '\n         </div>\n         ' + (description ? '<p class="gh-list-excerpt">' + description + '</p>' : '') + '\n            ' + (title && url ? '<a class="gh-list-readmore"\n                title="Lire la suite de la fiche : ' + title + '"\n                href="#' + url + '">Lire la suite de la fiche</a>' : '') + '\n       </div>\n     </article>';
@@ -791,17 +865,17 @@ router.route(':owner', function () {
       var folders = _ref2.folders;
       var files = _ref2.files;
       var contributors = _ref2.contributors;
-      var git_url = _ref2.git_url;
+      var github_url = _ref2.github_url;
       var image_url = _ref2.image_url;
       var description = _ref2.description;
-      return '<article class="gh-list-item gh-type-folder">\n          ' + (image_url ? '<img src="' + image_url + '">' : '') + '\n          <h2 class="gh-list-title"><a href="#' + url + '">' + title + '</a></h2>\n          <div class="gh-list-content">\n            <div class="gh-list-meta">\n              ' + (folders && files ? '<p>Dossiers : ' + folders + ' - Fiches : ' + files + '</p>' : '') + '\n              ' + (contributors ? '<p>Contributeurs : ' + contributors + '</p>' : '') + '\n              </p>\n              <p><a href="' + git_url + '">Voir sur Github</a></p>\n            </div>\n            ' + (description ? '<p class="gh-list-excerpt">' + description + '</p>' : '') + '\n            ' + (title && readme_url ? '<a class="gh-list-readmore"\n                title="Lire la suite de la fiche : ' + title + '"\n                href="#' + readme_url + '">Lire la présentation complète</a>' : '') + '\n          </div>\n        </article>';
+      return '<article class="gh-list-item gh-type-folder">\n          ' + (image_url ? '<img src="' + image_url + '">' : '') + '\n          <h2 class="gh-list-title"><a href="#' + url + '">' + title + '</a></h2>\n          <div class="gh-list-content">\n            <div class="gh-list-meta">\n              ' + (folders && files ? '<p>Dossiers : ' + folders + ' - Fiches : ' + files + '</p>' : '') + '\n              ' + (contributors ? '<p>Contributeurs : ' + contributors + '</p>' : '') + '\n              </p>\n              <p><a href="' + github_url + '">Voir sur Github</a></p>\n            </div>\n            ' + (description ? '<p class="gh-list-excerpt">' + description + '</p>' : '') + '\n            ' + (title && readme_url ? '<a class="gh-list-readmore"\n                title="Lire la suite de la fiche : ' + title + '"\n                href="#' + readme_url + '">Lire la présentation complète</a>' : '') + '\n          </div>\n        </article>';
     };
 
     template.folders = new Template('folders');
     template.folders.data = function () {
-      var ghApi = new GithubUrl(router.params);
+      var githubApi = new GithubUrl(router.params);
       var html = [];
-      ghApi.getJsonFolders().then(function (jsonResponse) {
+      githubApi.getJsonFolders().then(function (jsonResponse) {
         jsonResponse.map(function (_ref3) {
           var name = _ref3.name;
           var type = _ref3.type;
@@ -809,8 +883,8 @@ router.route(':owner', function () {
 
           if (type === 'file') {
             var readmeUrl = { owner: router.params.owner, repo: router.params.repo, branch: 'master', path: '' + (router.params.path ? router.params.path + '/' + name : name) };
-            var ghApiBlob = new GithubUrl(readmeUrl);
-            ghApiBlob.getMdBlob().then(function (mdResponse) {
+            var githubApiBlob = new GithubUrl(readmeUrl);
+            githubApiBlob.getMdBlob().then(function (mdResponse) {
               var contribution = new Markdown(mdResponse);
               var metas = contribution.isMetas() ? {
                 prose_url: ('http://prose.io/#' + html_url.match(/^https:\/\/github.com\/(.*)/)[1]).replace('blob', 'edit'),
@@ -831,13 +905,13 @@ router.route(':owner', function () {
             });
           } else {
             var _readmeUrl = { owner: router.params.owner, repo: name, branch: 'master', path: '' + (router.params.path ? router.params.path + '/README.md' : 'README.md') };
-            var _ghApiBlob = new GithubUrl(_readmeUrl);
-            _ghApiBlob.getMdBlob().then(function (mdResponse) {
+            var _githubApiBlob = new GithubUrl(_readmeUrl);
+            _githubApiBlob.getMdBlob().then(function (mdResponse) {
               var folder = new Markdown(mdResponse);
               var metas = folder.isMetas() ? {
                 url: '' + html_url.match(/^https:\/\/github.com\/(.*)/)[1],
                 title: folder.metas.title || name,
-                git_url: html_url,
+                github_url: html_url,
                 folders: folder.metas.folders,
                 files: folder.metas.files,
                 contributors: folder.metas.contributors,
@@ -845,7 +919,7 @@ router.route(':owner', function () {
                 image_url: folder.metas.image_url
               } : {
                 title: name,
-                git_url: html_url,
+                github_url: html_url,
                 url: '' + html_url.match(/^https:\/\/github.com\/(.*)/)[1]
               };
               html.push(htmlFolder(metas));
@@ -862,24 +936,24 @@ router.route(':owner', function () {
 
 {
   (function () {
-    var htmlRepo = function htmlRepo(_ref) {
+    var htmlRepositories = function htmlRepositories(_ref) {
       var url = _ref.url;
       var title = _ref.title;
       var folders = _ref.folders;
       var files = _ref.files;
       var contributors = _ref.contributors;
-      var git_url = _ref.git_url;
+      var github_url = _ref.github_url;
       var image_url = _ref.image_url;
       var description = _ref.description;
       var readme_url = _ref.readme_url;
-      return '<article class="gh-list-item gh-type-repo">\n      ' + (image_url ? '<img src="' + image_url + '">' : '') + '\n      <h2 class="gh-list-title"><a href="#' + url + '">' + title + '</a></h2>\n      <div class="gh-list-content">\n        <div class="gh-list-meta">\n          ' + (folders && files ? '<p>Dossiers : ' + folders + ' - Fiches : ' + files + '</p>' : '') + '\n          ' + (contributors ? '<p>Contributeurs : ' + contributors + '</p>' : '') + '\n          </p>\n          <p>\n          <a href="' + git_url + '">Voir sur Github</a>\n          </p>\n        </div>\n        ' + (description ? '<p class="gh-list-excerpt">' + description + '</p>' : '') + '\n        ' + (readme_url ? '<a class="gh-list-readmore"\n            title="Lire la suite de la fiche Titre de la fiche"\n            href="#' + readme_url + '">Lire la présentation complète</a>' : '') + '\n      </div>\n    </article>';
+      return '<article class="gh-list-item gh-type-repo">\n      ' + (image_url ? '<img src="' + image_url + '">' : '') + '\n      <h2 class="gh-list-title"><a href="#' + url + '">' + title + '</a></h2>\n      <div class="gh-list-content">\n        <div class="gh-list-meta">\n          ' + (folders && files ? '<p>Dossiers : ' + folders + ' - Fiches : ' + files + '</p>' : '') + '\n          ' + (contributors ? '<p>Contributeurs : ' + contributors + '</p>' : '') + '\n          </p>\n          <p>\n          <a href="' + github_url + '">Voir sur Github</a>\n          </p>\n        </div>\n        ' + (description ? '<p class="gh-list-excerpt">' + description + '</p>' : '') + '\n        ' + (readme_url ? '<a class="gh-list-readmore"\n            title="Lire la suite de la fiche Titre de la fiche"\n            href="#' + readme_url + '">Lire la présentation complète</a>' : '') + '\n      </div>\n    </article>';
     };
 
-    template.repos = new Template('repos');
-    template.repos.data = function () {
-      var ghApi = new GithubUrl(router.params);
+    template.repositories = new Template('repositories');
+    template.repositories.data = function () {
+      var githubApi = new GithubUrl(router.params);
       var html = [];
-      ghApi.getJsonRepo().then(function (jsonResponse) {
+      githubApi.getJsonRepo().then(function (jsonResponse) {
         jsonResponse.map(function (_ref2) {
           var name = _ref2.name;
           var type = _ref2.type;
@@ -887,12 +961,12 @@ router.route(':owner', function () {
           var url = _ref2.url;
 
           var readmeUrl = { owner: router.params.owner, repo: name, branch: 'master', path: 'README.md' };
-          var ghApiBlob = new GithubUrl(readmeUrl);
-          ghApiBlob.getMdBlob().then(function (mdResponse) {
+          var githubApiBlob = new GithubUrl(readmeUrl);
+          githubApiBlob.getMdBlob().then(function (mdResponse) {
             var contribution = new Markdown(mdResponse);
             var metas = contribution.isMetas() ? {
               url: html_url.replace('https://github.com/', ''),
-              git_url: html_url,
+              github_url: html_url,
               readme_url: html_url.replace('https://github.com/', '') + '/blob/master/README.md',
               title: contribution.metas.title,
               image_url: contribution.metas.image_url,
@@ -902,12 +976,12 @@ router.route(':owner', function () {
               files: contribution.metas.files
             } : {
               url: html_url.replace('https://github.com/', ''),
-              git_url: html_url,
+              github_url: html_url,
               title: name
             };
-            html.push(htmlRepo(metas));
-            template.repos.html(html.join('\n'));
-            template.repos.renderAsync(template.repos._htmlTpl);
+            html.push(htmlRepositories(metas));
+            template.repositories.html(html.join('\n'));
+            template.repositories.renderAsync(template.repositories._htmlTpl);
           });
         });
       });
@@ -924,8 +998,6 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
       var url = _ref.url;
       var title = _ref.title;
       var authors = _ref.authors;
-      var prose_url = _ref.prose_url;
-      var git_url = _ref.git_url;
       var image_url = _ref.image_url;
       var description = _ref.description;
       return '<article class="gh-list-item gh-type-file">\n       <h2 class="gh-list-title"><a href="#' + url + '">' + title + '</a></h2>\n       <div class="gh-list-content">\n         <div class="gh-list-meta">\n           ' + (authors ? '<p>Créé par : ' + authors + '</p>' : '') + '\n         </div>\n         ' + (image_url ? '<img src="' + image_url + '">' : '') + '\n         ' + (description ? ' <p class="gh-list-excerpt">' + description + '</p>' : '') + '\n         <a class="gh-list-readmore"\n           title="Lire la suite de la fiche : $(titre)"\n           href="#' + url + '">Lire la fiche</a>\n       </div>\n     </article>';
@@ -942,9 +1014,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
       var user = _router$queries$q$mat2[2];
 
       router.params.owner = user;
-      var ghApi = new GithubUrl(router.params);
+      var githubApi = new GithubUrl(router.params);
       var html = [];
-      ghApi.getJsonSearch(query).then(function (jsonResponse) {
+      githubApi.getJsonSearch(query).then(function (jsonResponse) {
         jsonResponse.items.map(function (_ref2) {
           var name = _ref2.name;
           var path = _ref2.path;
@@ -952,8 +1024,8 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
           var repository = _ref2.repository;
 
           var readmeUrl = { owner: router.params.owner, repo: repository.name, branch: 'master', path: path };
-          var ghApiBlob = new GithubUrl(readmeUrl);
-          ghApiBlob.getMdBlob().then(function (mdResponse) {
+          var githubApiBlob = new GithubUrl(readmeUrl);
+          githubApiBlob.getMdBlob().then(function (mdResponse) {
             var contribution = new Markdown(mdResponse);
             var metas = contribution.isMetas() ? {
               prose_url: ('http://prose.io/#' + html_url.match(/^https:\/\/github.com\/(.*)/)[1]).replace('blob', 'edit'),

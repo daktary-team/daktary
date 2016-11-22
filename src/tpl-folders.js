@@ -1,5 +1,5 @@
 {
-  const htmlContrib = ({url, title, authors, git_url, prose_url, image_url, description}) =>
+  const htmlContrib = ({url, title, authors, github_url, image_url, description}) =>
     `<article class="gh-list-item gh-type-file">
        ${
          image_url ? `<img src="${image_url}">` : ''
@@ -20,7 +20,7 @@
        </div>
      </article>`
 
-  const htmlFolder = ({url, readme_url, title, folders, files, contributors, git_url, image_url, description}) =>
+  const htmlFolder = ({url, readme_url, title, folders, files, contributors, github_url, image_url, description}) =>
     `<article class="gh-list-item gh-type-folder">
           ${ image_url ? `<img src="${image_url}">` : '' }
           <h2 class="gh-list-title"><a href="#${url}">${title}</a></h2>
@@ -29,7 +29,7 @@
               ${ (folders && files) ? `<p>Dossiers : ${folders} - Fiches : ${files}</p>` : '' }
               ${ contributors ? `<p>Contributeurs : ${contributors}</p>` : '' }
               </p>
-              <p><a href="${git_url}">Voir sur Github</a></p>
+              <p><a href="${github_url}">Voir sur Github</a></p>
             </div>
             ${ description ? `<p class="gh-list-excerpt">${description}</p>` : '' }
             ${ (title && readme_url) ?
@@ -42,15 +42,15 @@
 
   template.folders = new Template('folders')
   template.folders.data = () => {
-    const ghApi = new GithubUrl(router.params)
+    const githubApi = new GithubUrl(router.params)
     const html = []
-    ghApi.getJsonFolders()
+    githubApi.getJsonFolders()
       .then(jsonResponse => {
         jsonResponse.map(({name, type, html_url}) => {
           if (type === 'file') {
             const readmeUrl = {owner: router.params.owner, repo: router.params.repo, branch: 'master', path: `${(router.params.path) ? `${router.params.path}/${name}` : name}`}
-            const ghApiBlob = new GithubUrl(readmeUrl)
-            ghApiBlob.getMdBlob()
+            const githubApiBlob = new GithubUrl(readmeUrl)
+            githubApiBlob.getMdBlob()
               .then(mdResponse => {
                 const contribution = new Markdown(mdResponse)
                 const metas = contribution.isMetas() ?
@@ -73,15 +73,15 @@
               })
           } else {
             const readmeUrl = {owner: router.params.owner, repo: name, branch: 'master', path: `${(router.params.path) ? `${router.params.path}/README.md` : 'README.md'}`}
-            const ghApiBlob = new GithubUrl(readmeUrl)
-            ghApiBlob.getMdBlob()
+            const githubApiBlob = new GithubUrl(readmeUrl)
+            githubApiBlob.getMdBlob()
               .then(mdResponse => {
                 const folder = new Markdown(mdResponse)
                 const metas = folder.isMetas() ?
                   {
                     url: `${html_url.match(/^https:\/\/github.com\/(.*)/)[1]}`,
                     title: folder.metas.title || name,
-                    git_url: html_url,
+                    github_url: html_url,
                     folders: folder.metas.folders,
                     files: folder.metas.files,
                     contributors: folder.metas.contributors,
@@ -89,7 +89,7 @@
                     image_url: folder.metas.image_url
                   } : {
                     title: name,
-                    git_url: html_url,
+                    github_url: html_url,
                     url: `${html_url.match(/^https:\/\/github.com\/(.*)/)[1]}`
                   }
                 html.push(htmlFolder(metas))

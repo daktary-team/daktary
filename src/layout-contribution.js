@@ -2,8 +2,8 @@
 * Layout for manage and display Github contribution.
 *
 */
-layout.viewer = new Layout('viewer')
-layout.viewer.html(`
+layout.contribution = new Layout('contribution')
+layout.contribution.html(`
   <main data-template="contribution" class="container">
   </main>
 `)
